@@ -24,7 +24,7 @@ class ApplicationController < Sinatra::Base
 			redirect '/login'
 		else
 			redirect '/failure'
-		ends
+		end
 	end
 
 	get "/login" do
@@ -33,8 +33,9 @@ class ApplicationController < Sinatra::Base
 
 	post "/login" do
 		#your code here!
-		user = User.find_by(:username => params[:usernames])
-		if user
+		user = User.find_by(:username => params[:username])
+		if user && user.authenticate(params[:password])
+			session[:user_id] = user.id
 			redirect '/success'
 		else
 			redirect '/failure'
